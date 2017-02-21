@@ -1,0 +1,27 @@
+<div class="container">
+    <form class="form">
+        <div class="row">
+            <!--<div class="col">-->
+            <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-outline-primary" id="dropdownMenu1" ngbDropdownToggle>{{dieType}}</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <button class="dropdown-item" *ngFor="let type of types">{{type.display}}</button>
+                </div>
+            </div>
+            <!--</div>-->
+            <!--<div class="col">-->
+            <label for="dieNum">Number of die</label>
+            <input type="text" name="dieNum" value="1">
+            <label for="dieSides">Number of sides</label>
+            <input type="text" name="dieSides" value="6">
+            <!--</div>-->
+            <!--<button id="addRoll"></button>-->
+        </div>
+        <div class="row center">
+            <p>Or input manually</p>
+            <input type="text" name="manual" placeholder="eg. 3d6">
+        </div>
+        <button type="submit" id="rollSubmit" class="btn btn-primary col-xs-12 col-sm-6 offset-sm-3">Roll</button>
+    </form>
+</div>
+<h3 class="text-sm-center">{{diceRoll}}</h3>
