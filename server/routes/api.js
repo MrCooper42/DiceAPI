@@ -21,4 +21,9 @@ router.post('roll', (req, res) => {
     console.log("posted here")
 })
 
+router.get('/dice', (req, res) => {
+    console.log('hit in routes')
+    return true;
+})
+
 module.exports = router;

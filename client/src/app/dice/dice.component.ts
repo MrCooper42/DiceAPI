@@ -12,6 +12,12 @@ export class DiceComponent implements OnInit {
   diceRoll =  'TESTING!!!!';
   dieType;
   rollTotal;
+  rollForm = {
+    value: {
+      roll: "here"
+    }
+  }
+
 
   public types = [
     { value: null, display: 'Choose Roll Type'},
@@ -28,14 +34,14 @@ export class DiceComponent implements OnInit {
 
   rollDice() {
     let roll = this.rollForm.value.roll;
-    this.diceService.rollTotal(roll)
+    this.diceService.getTotal(roll)
     .subscribe (
       data => {
         console.log(data, 'data returned');
         this.rollTotal = data;
       },
       error => console.error(error));
-      this.rollForm.reset();
+      // this.rollForm.reset();
   }
 
   chooseType(value) {
