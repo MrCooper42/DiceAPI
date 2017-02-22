@@ -10,7 +10,7 @@ import { DiceService } from './dice.service';
   styleUrls: ['./dice.component.css']
 })
 export class DiceComponent implements OnInit {
-
+  manualMode = false;
   diceRoll = 'TESTING!!!!';
   dieType;
   rollTotal;
@@ -52,13 +52,18 @@ export class DiceComponent implements OnInit {
   }
 
   setRoll() {
+    let vals = this.dieForm.value;
     this.diceRoll = this.dieForm.value;
-    console.log(this.diceRoll, "roll")
+    console.log(this.diceRoll, 'roll')
   }
 
   chooseType(value) {
-    console.log(value,"value")
+    console.log(value,'value')
     this.dieType = value.display;
+  }
+
+  showManual() {
+    this.manualMode = !this.manualMode;
   }
 
   ngOnInit() {
@@ -67,6 +72,7 @@ export class DiceComponent implements OnInit {
       dieNum: new FormControl(null),
       dieSides: new FormControl(null),
       extraType: new FormControl(null),
+      litNum: new FormControl(null),
       manual: new FormControl(null)
     });
   }
