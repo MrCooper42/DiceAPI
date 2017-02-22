@@ -1,30 +1,38 @@
 <div class="container">
-  <form class="form">
-    <div class="row">
-      <!--<div class="col">-->
-      <div ngbDropdown class="d-inline-block">
-        <button class="btn btn-outline-primary" id="dropdownMenu1" ngbDropdownToggle>{{dieType}}</button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-          <button class="dropdown-item" *ngFor="let type of types">{{type.display}}</button>
+    <form [formGroup]="dieForm" (ngSubmit)="setRoll()">
+        <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-outline-primary" id="dropdownMenu1" ngbDropdownToggle>{{dieType}}</button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <button class="dropdown-item" *ngFor="let type of types" (click)="chooseType(type)">{{type.display}}</button>
+            </div>
         </div>
-      </div>
-      <!--</div>-->
-      <!--<div class="col">-->
-      <label for="dieNum">Number of die</label>
-      <input type="text" name="dieNum" value="1">
-      <label for="dieSides">Number of sides</label>
-      <input type="text" name="dieSides" value="6">
-      <!--</div>-->
-    </div>
-    <div class="col">
-      <p class="text-center">Input manually: </p>
-      <br>
-      <span>
-      <input type="text" name="manual" placeholder="eg. 3d6">
-      </span>
-    </div>
-    <button type="submit" id="rollSubmit" class="btn btn-primary col-xs-12 col-sm-6 offset-sm-3">Roll</button>
-  </form>
+        <div class="form-group col-xs-3" *ngIf="dieType != 'Single die roll'">
+            <label for="dieNum">Number of die: </label>
+            <input class="form-control" formControlName="dieNum" type="text" name="dieNum" value="1">
+        </div>
+        <div class="form-group col-xs-3">
+            <label for="dieSides">Number of sides: </label>
+            <input class="form-control" formControlName="dieSides" type="text" name="dieSides" value="6">
+        </div>
+        <div *ngIf="dieType == 'Drop lows roll'" class="form-group col-xs-3">
+            <label for="extraType">Number of low die to drop: </label>
+            <input class="form-control" formControlName="extraType" type="text" name="extraType" value="6">
+        </div>
+        <div *ngIf="dieType == 'Keep highs roll'" class="form-group col-xs-3">
+            <label for="extraType">Number of high die to keep: </label>
+            <input class="form-control" formControlName="extraType" type="text" name="extraType" value="6">
+        </div>
+        <div *ngIf="dieType == 'Explosive roll'" class="form-group col-xs-3">
+            <label for="extraType">Number for explosive roll: </label>
+            <input class="form-control" formControlName="extraType" type="text" name="extraType" value="6">
+        </div>
+        <div class="form-group">
+            <p class="text-center">Input manually: </p>
+            <input class="form-control" formControlName="manual" type="text" name="manual" placeholder="eg. 3d6">
+        </div>
+        <button type="submit" id="rollSubmit" class="btn btn-primary col-xs-12 col-sm-6 offset-sm-3">Roll</button>
+    </form>
+    <h3 class="text-sm-center">{{diceRoll}}</h3>
+    <button class="btn" id="addRoll" (click)="rollDice()" class="col-xs-12">test</button>
+
 </div>
-<h3 class="text-sm-center">{{diceRoll}}</h3>
-<button class="btn" id="addRoll" (click)="rollDice()">test</button>

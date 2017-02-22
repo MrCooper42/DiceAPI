@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+
 import { DiceService } from './dice.service';
 
 @Component({
@@ -18,18 +20,22 @@ export class DiceComponent implements OnInit {
     }
   }
 
-
+  public dieForm: FormGroup;
+  public submitted: boolean;
+  public events: any[] = [];
   public types = [
     { value: null, display: 'Choose Roll Type' },
     { value: null, display: 'Single die roll' },
     { value: null, display: 'Multiple die roll' },
     { value: null, display: 'Drop lows roll' },
     { value: null, display: 'Keep highs roll' },
+    { value: null, display: 'Explosive roll' },
     { value: null, display: 'Literal value' }
   ]
 
   constructor(
-    private diceService: DiceService
+    private diceService: DiceService,
+    private _fb: FormBuilder
   ) { }
 
   rollDice() {
@@ -45,12 +51,24 @@ export class DiceComponent implements OnInit {
     // this.rollForm.reset();
   }
 
+  setRoll() {
+    this.diceRoll = this.dieForm.value;
+    console.log(this.diceRoll, "roll")
+  }
+
   chooseType(value) {
-    this.dieType = value;
+    console.log(value,"value")
+    this.dieType = value.display;
   }
 
   ngOnInit() {
     this.dieType = this.types[0].display;
+    this.dieForm = new FormGroup({
+      dieNum: new FormControl(null),
+      dieSides: new FormControl(null),
+      extraType: new FormControl(null),
+      manual: new FormControl(null)
+    });
   }
 
 }
