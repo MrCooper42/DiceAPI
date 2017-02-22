@@ -9,23 +9,23 @@ import { DiceService } from './dice.service';
 })
 export class DiceComponent implements OnInit {
 
-  diceRoll =  'TESTING!!!!';
+  diceRoll = 'TESTING!!!!';
   dieType;
   rollTotal;
   rollForm = {
     value: {
-      roll: "here"
+      roll: 'here'
     }
   }
 
 
   public types = [
-    { value: null, display: 'Choose Roll Type'},
-    { value: null, display: 'Single die roll'},
-    { value: null, display: 'Multiple die roll'},
-    { value: null, display: 'Drop lows roll'},
-    { value: null, display: 'Keep highs roll'},
-    { value: null, display: 'Literal value'}
+    { value: null, display: 'Choose Roll Type' },
+    { value: null, display: 'Single die roll' },
+    { value: null, display: 'Multiple die roll' },
+    { value: null, display: 'Drop lows roll' },
+    { value: null, display: 'Keep highs roll' },
+    { value: null, display: 'Literal value' }
   ]
 
   constructor(
@@ -33,15 +33,16 @@ export class DiceComponent implements OnInit {
   ) { }
 
   rollDice() {
-    let roll = this.rollForm.value.roll;
-    this.diceService.getTotal(roll)
-    .subscribe (
+    console.log('Clicked');
+    const roll = this.rollForm.value.roll;
+    this.diceService.getTotal()
+      .subscribe(
       data => {
         console.log(data, 'data returned');
         this.rollTotal = data;
       },
       error => console.error(error));
-      // this.rollForm.reset();
+    // this.rollForm.reset();
   }
 
   chooseType(value) {
@@ -49,7 +50,7 @@ export class DiceComponent implements OnInit {
   }
 
   ngOnInit() {
-  this.dieType = this.types[0].display;
-}
+    this.dieType = this.types[0].display;
+  }
 
 }
