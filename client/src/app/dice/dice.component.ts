@@ -40,7 +40,7 @@ export class DiceComponent implements OnInit {
 
   rollDice(formData) {
     console.log('Clicked');
-    const roll = this.rollForm.value.roll;
+    console.log(formData, "form in diceroll")
     this.diceService.getTotal(formData)
       .subscribe(
       data => {
@@ -69,8 +69,8 @@ export class DiceComponent implements OnInit {
       final = this.allInputs[0]
     }
     formData.submitRoll = final;
-    console.log(final, 'input');
     console.log(this.diceRoll, 'roll');
+    return this.rollDice(formData);
   }
 
   chooseType(value) {

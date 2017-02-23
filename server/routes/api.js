@@ -3,7 +3,7 @@
 const express = require('express');
 const router = express.Router();
 
-const API = require('./diceAPI.js');
+const API = require('../api/dice.js');
 const axios = require('axios');
 // const API = 'https://jsonplaceholder.typicode.com'
 
@@ -18,8 +18,8 @@ router.get('/posts', (req, res) => {
         .catch(error => res.status(500).send(error));
 });
 
-router.get('/roll', (req, res) => {
-    console.log('hit in routes')
+router.post('/roll', (req, res) => {
+    console.log(req.body, 'req hit in routes')
     let object = {
         data: "blah"
     }

@@ -10,10 +10,10 @@ export class DiceService {
     private http: Http
   ) { }
   getTotal(formData) {
-    console.log('here in service')
-    return this.http.get(`/api/roll`)
+    console.log(formData, 'form here in service');
+    return this.http.post(`/api/roll`, formData)
       .map((res: Response) => {
-        console.log(res, 'res in service')
+        console.log(res, 'res in service');
         return res.json()
       }).catch(error => Observable.throw(error.json().error || console.log(error, 'error')));
   }
