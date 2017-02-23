@@ -15,6 +15,7 @@
         "lint": "ng lint",
         "e2e": "ng e2e",
         "start": "node ./server/bin/www",
+        "test": "mocha ./server/test/ && ng test",
         "build": "start ng build --watch && nodemon ",
         "build:prod": "ng build --prod && npm start"
     },

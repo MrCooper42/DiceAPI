@@ -2,7 +2,7 @@
 
 const diceRegex = /^(\d+)(?:d(\d*)(?:([kdx])(\d+))?)?$/;
 const dieRegex = /^(d)(\d+)$/
-const operatorRegex = /(-|\+)/g;
+const operatorRegex = /([-+])/g;
 
 const randInt = max => Math.ceil(Math.random() * max);
 
@@ -121,6 +121,8 @@ const explosiveRoll = (toRoll, rol, answer = 0) => {
     return val;
 }
 
+console.log(/^(\d+)(?:d(\d*)(?:([kdx])(\d+))?) *([-+] *|$)/.exec("3d5 +5"), "test regex")
+
 const evaluate = (userInput) => {
     let vals = [];
 
@@ -129,6 +131,13 @@ const evaluate = (userInput) => {
         .join('')
         .split(operatorRegex)
         .map((input) => (dieRegex.exec(input) !== null) ? input = `1${input}` : input)
+        .filter((check) => {
+            let bool = false
+            if (diceRegex.exec(check) !== null) bool = true;
+            if (operatorRegex.test(check)) bool = true;
+            return bool
+        });
+    // .filter((check) => (diceRegex.exec(check) !== null) ? true : (operatorRegex.test(check)) ? true : false);
 
     if (uiArr.length % 2 == 0) {
         uiArr.pop();
@@ -215,8 +224,8 @@ const probability = (input) => {
 // console.log(evaluate(highest), "highest");
 // console.log(evaluate(explosive), "explosive");
 // console.log(evaluate(fail), "fail");
-// check('3d6+212', 230, 209)
-probability('3d6')
+check('3d6+212', 230, 209)
+    // probability('3d6')
 
 
 module.exports = {
