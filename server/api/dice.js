@@ -121,7 +121,7 @@ const explosiveRoll = (toRoll, rol, answer = 0) => {
     return val;
 }
 
-console.log(/^(\d+)(?:d(\d*)(?:([kdx])(\d+))?) *([-+] *|$)/.exec("3d5 +5"), "test regex")
+// console.log(/^(\d+)(?:d(\d*)(?:([kdx])(\d+))?) *([-+] *|$)/.exec("3d5 +5"), "test regex")
 
 const evaluate = (userInput) => {
     let vals = [];
@@ -186,9 +186,8 @@ const check = (input, max, min) => {
 }
 
 const probability = (input) => {
-    console.log(input, "input")
     let prob = {};
-    for (let i = 0; i < 100000; i++) {
+    for (let i = 0; i < 250000; i++) {
         let answer = evaluate(input).answer
 
         if (prob.hasOwnProperty(answer)) {
@@ -200,10 +199,9 @@ const probability = (input) => {
     }
     for (var roll in prob) {
         if (prob.hasOwnProperty(roll)) {
-            prob[roll] = ((prob[roll] / 100000) * 100).toFixed(4);
+            prob[roll] = ((prob[roll] / 250000) * 100).toFixed(4);
         }
     }
-    console.log(prob)
     return prob
 }
 
@@ -224,8 +222,8 @@ const probability = (input) => {
 // console.log(evaluate(highest), "highest");
 // console.log(evaluate(explosive), "explosive");
 // console.log(evaluate(fail), "fail");
-check('3d6+212', 230, 209)
-    // probability('3d6')
+// check('3d6+212', 230, 209)
+// probability('3d6')
 
 
 module.exports = {

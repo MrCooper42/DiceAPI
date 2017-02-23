@@ -17,8 +17,6 @@ router.post('/roll', (req, res) => {
 })
 
 router.post('/probability', (req, res) => {
-    console.log(req.body, 'wfefe')
-    console.log(req.body.submitRoll, "234234")
     let prob = new Promise((resolve, reject) => {
         resolve(API.probability(req.body.submitRoll));
     });
