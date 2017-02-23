@@ -29,7 +29,7 @@ describe("die roller", function() {
         })
         it("3d6 returns a value between 3 and 18", function() {
             var evaluated;
-            for (var i = 0; i < 10000; i++) {
+            for (var i = 0; i < 100000; i++) {
                 var singleEval = dice.evaluate("3d6").answer;
                 if (singleEval <= 18 && singleEval >= 3) {
                     evaluated = true;
@@ -41,8 +41,8 @@ describe("die roller", function() {
             expect(evaluated).to.equal(true);
         })
         it("5d6d2​ returns a value between 3 and 18", function() {
-            var evaluated = 10000;
-            for (var i = 0; i < 1000; i++) {
+            var evaluated;
+            for (var i = 0; i < 100000; i++) {
                 var lowEval = dice.evaluate("5d6d2").answer;
                 if (lowEval <= 18 && lowEval >= 3) {
                     evaluated = true;
@@ -54,8 +54,8 @@ describe("die roller", function() {
             expect(evaluated).to.equal(true);
         })
         it("5d6k2 returns a value between 2 and 12", function() {
-            var evaluated = 10000;
-            for (var i = 0; i < 1000; i++) {
+            var evaluated;
+            for (var i = 0; i < 10000; i++) {
                 var highEval = dice.evaluate("5d6k2").answer;
                 if (highEval <= 12 && highEval >= 2) {
                     evaluated = true;
@@ -67,8 +67,8 @@ describe("die roller", function() {
             expect(evaluated).to.equal(true);
         })
         it("4d6x5 returns a value between 4 and Infinity", function() {
-            var evaluated = 1000;
-            for (var i = 0; i < 10000; i++) {
+            var evaluated;
+            for (var i = 0; i < 100000; i++) {
                 var expEval = dice.evaluate("4d6x5").answer;
                 if (expEval >= 2) {
                     evaluated = true;
@@ -80,8 +80,8 @@ describe("die roller", function() {
             expect(evaluated).to.equal(true);
         })
         it("3d6 + 2 returns a value between 5 and 20", function() {
-            var evaluated = 1000;
-            for (var i = 0; i < 10000; i++) {
+            var evaluated;
+            for (var i = 0; i < 100000; i++) {
                 var multiEval = dice.evaluate("3d6 + 2").answer;
                 if (multiEval >= 5 && multiEval <= 20) {
                     evaluated = true;
@@ -93,8 +93,8 @@ describe("die roller", function() {
             expect(evaluated).to.equal(true);
         })
         it("4d8d1 - 1d4 returns a value between -1 and 23", function() {
-            var evaluated = 1000;
-            for (var i = 0; i < 10000; i++) {
+            var evaluated;
+            for (var i = 0; i < 100000; i++) {
                 var multiEval = dice.evaluate("4d8d1 - 1d4").answer;
                 if (multiEval >= -1 && multiEval <= 23) {
                     evaluated = true;
