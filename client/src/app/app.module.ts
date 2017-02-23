@@ -7,7 +7,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 
-import { PostsModule } from './posts/posts.module';
 import { DiceModule } from './dice/dice.module';
 
 import { Routing } from './app.routing';
@@ -23,7 +22,6 @@ import { DiceChartsComponent } from './dice-charts/dice-charts.component';
     BrowserModule,
     FormsModule,
     HttpModule,
-    PostsModule,
     DiceModule,
     Routing
   ],
