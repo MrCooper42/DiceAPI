@@ -9,7 +9,7 @@ export class DiceService {
   constructor(
     private http: Http
   ) { }
-  getTotal() {
+  getTotal(formData) {
     console.log('here in service')
     return this.http.get(`/api/roll`)
       .map((res: Response) => {

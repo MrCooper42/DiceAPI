@@ -13,52 +13,64 @@ import { DieModel } from './dieModel';
 export class DiceComponent implements OnInit {
   manualMode = false;
   dieTypeDisplay;
-  currentInput = []
+  currentInput = '';
+  allInputs = [];
   dieType = '';
   rollTotal;
-  rollForm = {
-    value: {
-      roll: 'here'
-    }
-  }
+  finalTotal;
   currExtra = '';
   dieModel = new DieModel('3', 'd', '6', '', '', '', '');
   diceRoll = this.dieModel.dieNum + this.dieModel.dieD + this.dieModel.dieSides;
   public dieForm: FormGroup;
   // public submitted: boolean;
   // public events: any[] = [];
-  public types = [{value: '', display: 'Choose Roll Type'},
-    {value: '', display: 'Single die roll'},
-    {value: '', display: 'Multiple die roll'},
-    {value: 'd', display: 'Drop lows roll'},
-    {value: 'k', display: 'Keep highs roll'},
-    {value: 'x', display: 'Explosive roll'},
-    {value: '', display: 'Literal value'}
+  public types = [{ value: '', display: 'Choose Roll Type' },
+  { value: '', display: 'Single die roll' },
+  { value: '', display: 'Multiple die roll' },
+  { value: 'd', display: 'Drop lows roll' },
+  { value: 'k', display: 'Keep highs roll' },
+  { value: 'x', display: 'Explosive roll' },
+  { value: '', display: 'Literal value' }
   ]
 
   constructor(
     private diceService: DiceService,
     private _fb: FormBuilder
-  ) {}
+  ) { }
 
-  rollDice() {
+  rollDice(formData) {
     console.log('Clicked');
     const roll = this.rollForm.value.roll;
-    this.diceService.getTotal()
+    this.diceService.getTotal(formData)
       .subscribe(
-        data => {
-          console.log(data, 'data returned');
-          this.rollTotal = data;
-        },
-        error => console.error(error));
+      data => {
+        console.log(data, 'data returned');
+        this.rollTotal = data;
+      },
+      error => console.error(error));
     // this.rollForm.reset();
   }
 
   setRoll() {
-    this.currentInput.push(this.dieForm.value.submitRoll);
-    let vals = this.dieForm.value;
-    this.diceRoll = this.dieForm.value;
-    console.log(this.diceRoll, 'roll')
+    const formData = this.dieForm.value;
+    console.log(formData, "formData")
+    let input;
+    let final;
+    if (formData.manual.length > 0) {
+      input = formData.manual;
+      formData.submitRoll = input;
+    } else {
+      input = formData.dieNum + formData.dieD + formData.dieSides + this.dieType + formData.extraNum;
+    }
+    this.allInputs.push(input);
+    if (this.allInputs.length > 1) { 
+      final = this.allInputs.join('');
+    } else {
+      final = this.allInputs[0]
+    }
+    formData.submitRoll = final;
+    console.log(final, 'input');
+    console.log(this.diceRoll, 'roll');
   }
 
   chooseType(value) {
@@ -92,6 +104,11 @@ export class DiceComponent implements OnInit {
   }
 
   showManual() {
+    if (this.manualMode) {
+      this.changeForm();
+    } else {
+      this.dieForm.reset();
+    }
     this.manualMode = !this.manualMode;
   }
 
@@ -103,7 +120,7 @@ export class DiceComponent implements OnInit {
       extraNum: new FormControl(this.dieModel.extraNum),
       litNum: new FormControl(this.dieModel.litNum),
       manual: new FormControl(this.dieModel.manual),
-      submitRoll: new FormControl(this.currentInput[this.currentInput.length - 1])
+      submitRoll: new FormControl(null)
     });
   }
 
