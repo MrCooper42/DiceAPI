@@ -7,14 +7,15 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const expressSanitizer = require('express-sanitizer');
+const hbs = require('hbs');
 
 const api = require('./routes/api');
 
 const app = express();
 
 // view engine setup
-// app.set('views', path.join(__dirname, '../public/views'));
-// app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, '../client/views'));
+app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in client
 //app.use(favicon(path.join(__dirname, '../client/src', 'favicon.ico')));

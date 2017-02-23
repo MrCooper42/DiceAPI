@@ -19,12 +19,11 @@ router.get('/posts', (req, res) => {
 });
 
 router.post('/roll', (req, res) => {
-    console.log(req.body, 'req hit in routes')
-    let object = {
-        data: "blah"
-    }
-    let die = API.evaluate("3d6");
-    res.status(200).json(die)
+    // check validity here for quicker response
+    let die = new Promise((resolve, reject) => {
+        resolve(API.evaluate(req.body.submitRoll));
+    });
+    die.then((dieResolve) => res.status(200).json(dieResolve))
 })
 
 module.exports = router;

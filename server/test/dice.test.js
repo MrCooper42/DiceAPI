@@ -79,6 +79,19 @@ describe("die roller", function() {
             }
             expect(evaluated).to.equal(true);
         })
+        it("3d6 + 2 returns a value between 5 and 20", function() {
+            var evaluated = 1000;
+            for (var i = 0; i < 10000; i++) {
+                var multiEval = dice.evaluate("3d6 + 2").answer;
+                if (multiEval >= 5 && multiEval <= 20) {
+                    evaluated = true;
+                } else {
+                    evaluated = false;
+                    expect(multiEval).to.equal("a number between 5 and 20");
+                }
+            }
+            expect(evaluated).to.equal(true);
+        })
         it("4d8d1 - 1d4 returns a value between -1 and 23", function() {
             var evaluated = 1000;
             for (var i = 0; i < 10000; i++) {

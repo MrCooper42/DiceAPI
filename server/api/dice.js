@@ -1,16 +1,14 @@
-let single = "3d6";
-let lowest = "5d6d2";
-let highest = "5d6k2";
-let explosive = "4d6x5";
-let literal = "2";
-let fail = "xxxxxxxxx"
-let input = explosive + " - " + literal
+'use strict';
+
 const diceRegex = /^(\d+)(?:d(\d*)(?:([kdx])(\d+))?)?$/;
 const dieRegex = /^(d)(\d+)$/
+const operatorRegex = /(-|\+)/g;
+
 const randInt = max => Math.ceil(Math.random() * max);
 
 const dieRoll = (expression) => {
     let type = determineType(expression);
+    // console.log(type, "type")
     if (type.type === null) {
         return null;
     }
@@ -35,6 +33,7 @@ const dieRoll = (expression) => {
 }
 
 const determineType = (toRoll) => {
+    // console.log(toRoll, "toroll")
     if (diceRegex.exec(toRoll) === null) {
         return null;
     }
@@ -51,13 +50,13 @@ const determineType = (toRoll) => {
     } else if (type === undefined) {
         roll.type = "single";
         return roll;
-    } else if (type === "d" && num < N) {
+    } else if (type == "d" && num < N) {
         roll.type = "lowest";
         return roll;
-    } else if (type === "k" && num < N) {
+    } else if (type == "k" && num < N) {
         roll.type = "highest";
         return roll;
-    } else if (type === "x" && num <= sides) {
+    } else if (type == "x" && num <= sides) {
         roll.type = "explosive";
         return roll;
     } else {
@@ -123,13 +122,14 @@ const explosiveRoll = (toRoll, rol, answer = 0) => {
 }
 
 let evaluate = (userInput) => {
-    let operatorRegex = /(-|\+)/g
-    let vals = []
-    if (dieRegex.exec(userInput) !== null) {
-        userInput = "1" + userInput
-    }
-    userInput = userInput.split(' ').join('').split(operatorRegex)
-        .filter((check) => (diceRegex.exec(check) !== null || operatorRegex.test(check)));
+    let vals = [];
+
+    userInput = userInput
+        .split(' ')
+        .join('')
+        .split(operatorRegex)
+        .filter((check) => ((diceRegex.exec(check) !== null || dieRegex.exec(check) !== null) || operatorRegex.test(check)))
+        .map((input) => (dieRegex.exec(input) !== null) ? input = `1${input}` : input);
     if (userInput.length % 2 == 0) {
         userInput.pop();
     }
@@ -137,6 +137,19 @@ let evaluate = (userInput) => {
         // console.log("fail here")
         return null;
     }
+
+    // console.log(userInput, "str")
+    // let str = userInput
+    //     .map((element) => {
+    //         if (diceRegex.exec(element) !== null) {
+    //             let temp = dieRoll(element)
+    //             vals.push(temp)
+    //             return element = temp.total
+    //         } else {
+    //             return element
+    //         }
+    //     })
+    //     .join('')
 
     let answer = eval(userInput
         .map((element) => {
@@ -149,20 +162,47 @@ let evaluate = (userInput) => {
             }
         })
         .join(''));
+
     let data = {
         'values': vals,
         'answer': answer
     };
-    return data
+    return data;
 }
 
-console.log(evaluate(input), "input")
-console.log(evaluate('d6'), "single")
-console.log(evaluate(literal), "literal")
-console.log(evaluate(lowest), "lowest")
-console.log(evaluate(highest), "highest")
-console.log(evaluate(explosive), "explosive")
-console.log(evaluate(fail), "fail")
+let check = (input, max, min) => {
+    let loose = [];
+    let working = [];
+    for (let i = 0; i < 1000; i++) {
+        let answer = evaluate(input).answer
+        if (answer <= max + 18 && answer >= min - 18) {
+            working.push(answer)
+        } else if (answer >= 3 && answer <= 8) {
+            loose.push(answer);
+        }
+    }
+    console.log(loose.length, "loose")
+    console.log(working.length, "working")
+}
+
+// let single = "3d6";
+// let lowest = "5d6d2";
+// let highest = "5d6k2";
+let explosive = "4d6x5";
+let literal = "200";
+// let fail = "xxxxxxxxx";
+// let input = `${explosive} + ${literal}`;
+// console.log(eval(`${literal}+${literal}`), "lit")
+console.log(evaluate('3d6+211'), "input");
+check('3d6+212', 230, 209)
+    // console.log(evaluate(input), "input 2");
+    // console.log(evaluate('d6'), "single");
+    // console.log(evaluate(literal), "literal");
+    // console.log(evaluate(single), "multi");
+    // console.log(evaluate(lowest), "lowest");
+    // console.log(evaluate(highest), "highest");
+    // console.log(evaluate(explosive), "explosive");
+    // console.log(evaluate(fail), "fail");
 
 module.exports = {
     determineType: determineType,

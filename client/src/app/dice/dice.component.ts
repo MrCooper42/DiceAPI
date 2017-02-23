@@ -48,7 +48,8 @@ export class DiceComponent implements OnInit {
         this.rollTotal = data;
       },
       error => console.error(error));
-    // this.rollForm.reset();
+      this.allInputs = [];
+      this.changeForm();
   }
 
   setRoll() {
@@ -58,6 +59,7 @@ export class DiceComponent implements OnInit {
     let final;
     if (formData.manual.length > 0) {
       input = formData.manual;
+      this.dieForm.reset();
       formData.submitRoll = input;
     } else {
       input = formData.dieNum + formData.dieD + formData.dieSides + this.dieType + formData.extraNum;
