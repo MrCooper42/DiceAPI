@@ -31,30 +31,15 @@ export class DiceComponent implements OnInit {
   { value: 'k', display: 'Keep highs roll' },
   { value: 'x', display: 'Explosive roll' },
   { value: '', display: 'Literal value' }
-  ]
+  ];
 
   constructor(
     private diceService: DiceService,
     private _fb: FormBuilder
   ) { }
 
-  rollDice(formData) {
-    console.log('Clicked');
-    console.log(formData, "form in diceroll")
-    this.diceService.getTotal(formData)
-      .subscribe(
-      data => {
-        console.log(data, 'data returned');
-        this.rollTotal = data;
-      },
-      error => console.error(error));
-      this.allInputs = [];
-      this.changeForm();
-  }
-
   setRoll() {
     const formData = this.dieForm.value;
-    console.log(formData, "formData")
     let input;
     let final;
     if (formData.manual.length > 0) {
@@ -65,10 +50,10 @@ export class DiceComponent implements OnInit {
       input = formData.dieNum + formData.dieD + formData.dieSides + this.dieType + formData.extraNum;
     }
     this.allInputs.push(input);
-    if (this.allInputs.length > 1) { 
+    if (this.allInputs.length > 1) {
       final = this.allInputs.join('');
     } else {
-      final = this.allInputs[0]
+      final = this.allInputs[0];
     }
     formData.submitRoll = final;
     console.log(this.diceRoll, 'roll');
@@ -76,7 +61,6 @@ export class DiceComponent implements OnInit {
   }
 
   chooseType(value) {
-    console.log(this.dieForm)
     switch (value.display) {
       case 'Literal value':
         this.dieModel = new DieModel('', '', '', '', '2', '', '');
@@ -112,6 +96,32 @@ export class DiceComponent implements OnInit {
       this.dieForm.reset();
     }
     this.manualMode = !this.manualMode;
+  }
+
+  rollDice(formData) {
+    this.diceService.getTotal(formData)
+      .subscribe(
+      data => {
+        console.log(data, 'roll returned');
+        this.rollTotal = data;
+      },
+      error => console.error(error));
+      this.getStats(formData);
+      this.allInputs = [];
+      this.changeForm();
+
+  }
+
+  getStats(formData) {
+    this.diceService.getProbability(formData)
+      .subscribe(
+      data => {
+        console.log(data, 'stats returned');
+        this.rollTotal = data;
+      },
+      error => console.error(error));
+      this.allInputs = [];
+      this.changeForm();
   }
 
   changeForm() {

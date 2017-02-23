@@ -37,7 +37,7 @@ const determineType = (toRoll) => {
     if (diceRegex.exec(toRoll) === null) {
         return null;
     }
-    let [initRoll, N, sides, type, num, ...rest] = diceRegex.exec(toRoll)
+    let [initRoll, N, sides, type, num, ...rest] = diceRegex.exec(toRoll);
     let roll = {
         N: parseInt(N),
         sides: parseInt(sides),
@@ -121,7 +121,7 @@ const explosiveRoll = (toRoll, rol, answer = 0) => {
     return val;
 }
 
-let evaluate = (userInput) => {
+const evaluate = (userInput) => {
     let vals = [];
 
     let uiArr = userInput
@@ -129,7 +129,6 @@ let evaluate = (userInput) => {
         .join('')
         .split(operatorRegex)
         .map((input) => (dieRegex.exec(input) !== null) ? input = `1${input}` : input)
-        // .filter((check) => ((diceRegex.exec(check) !== null || operatorRegex.test(check))));
 
     if (uiArr.length % 2 == 0) {
         uiArr.pop();
@@ -159,26 +158,44 @@ let evaluate = (userInput) => {
     return data;
 }
 
-let check = (input, max, min) => {
+const check = (input, max, min) => {
     let loose = [];
     let working = [];
-    let out = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 100000; i++) {
 
         let answer = evaluate(input).answer
 
-        if (answer <= max + 18 && answer >= min - 18) {
+        if (answer <= max && answer >= min) {
             working.push(answer)
-        } else if (answer >= 3 && answer <= 18) {
-            loose.push(answer);
         } else {
-            out.push(answer);
+            loose.push(answer);
         }
 
     }
-    console.log(loose.length, "loose")
-    console.log(out, "out")
-    console.log(working.length, "working")
+    console.log(loose.length, "loose");
+    console.log(working.length, "working");
+}
+
+const probability = (input) => {
+    console.log(input, "input")
+    let prob = {};
+    for (let i = 0; i < 100000; i++) {
+        let answer = evaluate(input).answer
+
+        if (prob.hasOwnProperty(answer)) {
+            prob[answer] += 1;
+        } else {
+            prob[answer] = 1;
+        }
+
+    }
+    for (var roll in prob) {
+        if (prob.hasOwnProperty(roll)) {
+            prob[roll] = ((prob[roll] / 100000) * 100).toFixed(4);
+        }
+    }
+    console.log(prob)
+    return prob
 }
 
 // let single = "3d6";
@@ -190,7 +207,6 @@ let check = (input, max, min) => {
 // let input = `${explosive} + ${literal}`;
 // console.log(eval(`${literal}+${literal}`), "lit")
 // console.log(evaluate('3d6+211'), "input");
-// check('3d6+212', 230, 209)
 // console.log(evaluate(input), "input 2");
 // console.log(evaluate('d6'), "single");
 // console.log(evaluate(literal), "literal");
@@ -199,11 +215,15 @@ let check = (input, max, min) => {
 // console.log(evaluate(highest), "highest");
 // console.log(evaluate(explosive), "explosive");
 // console.log(evaluate(fail), "fail");
+// check('3d6+212', 230, 209)
+probability('3d6')
+
 
 module.exports = {
     determineType: determineType,
     evaluate: evaluate,
     keepHigh: keepHigh,
     dropLow: dropLow,
-    diceRoll: diceRoll
+    diceRoll: diceRoll,
+    probability: probability
 }
