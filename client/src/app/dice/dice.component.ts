@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef,OnInit } from '@angular/core';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+
+import * as D3 from 'd3/index';
 
 import { DiceService } from './dice.service';
 import { DieModel } from './dieModel';
@@ -17,13 +19,14 @@ export class DiceComponent implements OnInit {
   allInputs = [];
   dieType = '';
   rollTotal;
-  finalTotal;
   currExtra = '';
+  host;
+  svgContainer;
+
+  errorMessage: string;
   dieModel = new DieModel('3', 'd', '6', '', '', '', '');
-  diceRoll = this.dieModel.dieNum + this.dieModel.dieD + this.dieModel.dieSides;
+
   public dieForm: FormGroup;
-  // public submitted: boolean;
-  // public events: any[] = [];
   public types = [{ value: '', display: 'Choose Roll Type' },
   { value: '', display: 'Single die roll' },
   { value: '', display: 'Multiple die roll' },
@@ -35,8 +38,11 @@ export class DiceComponent implements OnInit {
 
   constructor(
     private diceService: DiceService,
-    private _fb: FormBuilder
-  ) { }
+    private _fb: FormBuilder,
+    private _element: ElementRef
+  ) {
+    this.host = D3.select(this._element.nativeElement);
+   }
 
   setRoll() {
     const formData = this.dieForm.value;
@@ -56,7 +62,6 @@ export class DiceComponent implements OnInit {
       final = this.allInputs[0];
     }
     formData.submitRoll = final;
-    console.log(this.diceRoll, 'roll');
     return this.rollDice(formData);
   }
 
@@ -98,6 +103,19 @@ export class DiceComponent implements OnInit {
     this.manualMode = !this.manualMode;
   }
 
+  changeForm() {
+    this.dieForm = new FormGroup({
+      dieNum: new FormControl(this.dieModel.dieNum),
+      dieD: new FormControl(this.dieModel.dieD),
+      dieSides: new FormControl(this.dieModel.dieSides),
+      extraNum: new FormControl(this.dieModel.extraNum),
+      litNum: new FormControl(this.dieModel.litNum),
+      manual: new FormControl(this.dieModel.manual),
+      submitRoll: new FormControl(null)
+    });
+  }
+
+// connecting to service
   rollDice(formData) {
     this.diceService.getTotal(formData)
       .subscribe(
@@ -124,21 +142,15 @@ export class DiceComponent implements OnInit {
       this.changeForm();
   }
 
-  changeForm() {
-    this.dieForm = new FormGroup({
-      dieNum: new FormControl(this.dieModel.dieNum),
-      dieD: new FormControl(this.dieModel.dieD),
-      dieSides: new FormControl(this.dieModel.dieSides),
-      extraNum: new FormControl(this.dieModel.extraNum),
-      litNum: new FormControl(this.dieModel.litNum),
-      manual: new FormControl(this.dieModel.manual),
-      submitRoll: new FormControl(null)
-    });
+// D3 Work
+  buildSVG(): void {
+    this.svgContainer = this.host.append('div')
   }
 
   ngOnInit() {
     this.dieTypeDisplay = this.types[0].display;
     this.changeForm();
+    this.buildSVG();
   }
 
 }

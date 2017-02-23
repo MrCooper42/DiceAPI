@@ -11,10 +11,12 @@ import { PostsModule } from './posts/posts.module';
 import { DiceModule } from './dice/dice.module';
 
 import { Routing } from './app.routing';
+import { DiceChartsComponent } from './dice-charts/dice-charts.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    DiceChartsComponent,
   ],
   imports: [
     NgbModule.forRoot(),
