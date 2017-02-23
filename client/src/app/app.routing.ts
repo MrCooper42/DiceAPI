@@ -1,6 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import { PostsComponent } from './posts/posts.component';
 import { DiceComponent } from './dice/dice.component';
 
 const ROUTES: Routes = [
@@ -8,10 +7,6 @@ const ROUTES: Routes = [
         path: '',
         redirectTo: 'dice',
         pathMatch: 'full'
-    },
-    {
-        path: 'posts',
-        component: PostsComponent
     },
     {
         path: 'dice',
