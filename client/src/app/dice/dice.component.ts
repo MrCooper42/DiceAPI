@@ -110,7 +110,6 @@ export class DiceComponent implements OnInit {
       manual: new FormControl(this.dieModel.manual),
       submitRoll: new FormControl(null)
     });
-    console.log(this.dieForm, "form")
   }
 
 // connecting to service
