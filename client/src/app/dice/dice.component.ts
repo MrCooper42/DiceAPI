@@ -1,6 +1,7 @@
+import { visitAll } from '@angular/compiler/src/ml_parser/ast';
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 import * as D3 from 'd3/index';
 
@@ -39,7 +40,7 @@ export class DiceComponent implements OnInit {
   // errorMessage: string; TODO:
   dieModel = new DieModel('3', 'd', '6', '', '', '', '');
 
-  constructor(private diceService: DiceService) { }
+  constructor(private diceService: DiceService, private _fb: FormBuilder) { }
 
   setRoll() {
     const formData = this.dieForm.value;
@@ -101,12 +102,13 @@ export class DiceComponent implements OnInit {
   }
 
   changeForm() {
-    this.dieForm = new FormGroup({
-      dieNum: new FormControl(this.dieModel.dieNum),
+    const isIntegerRegex = /^\d+$/;
+    this.dieForm = this._fb.group({
+      dieNum: new FormControl(this.dieModel.dieNum, Validators.pattern(isIntegerRegex)),
       dieD: new FormControl(this.dieModel.dieD),
-      dieSides: new FormControl(this.dieModel.dieSides),
-      extraNum: new FormControl(this.dieModel.extraNum),
-      litNum: new FormControl(this.dieModel.litNum),
+      dieSides: new FormControl(this.dieModel.dieSides, Validators.pattern(isIntegerRegex)),
+      extraNum: new FormControl(this.dieModel.extraNum, Validators.pattern(isIntegerRegex)),
+      litNum: new FormControl(this.dieModel.litNum, Validators.pattern(isIntegerRegex)),
       manual: new FormControl(this.dieModel.manual, Validators.required),
       submitRoll: new FormControl(null)
     });
