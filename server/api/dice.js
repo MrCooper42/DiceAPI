@@ -187,7 +187,7 @@ const check = (input, max, min) => {
 
 const probability = (input) => {
     let prob = {};
-    for (let i = 0; i < 25000; i++) {
+    for (let i = 0; i < 50000; i++) {
         let answer = evaluate(input).answer
 
         if (prob.hasOwnProperty(answer)) {
@@ -199,7 +199,7 @@ const probability = (input) => {
     }
     for (var roll in prob) {
         if (prob.hasOwnProperty(roll)) {
-            prob[roll] = ((prob[roll] / 25000) * 100).toFixed(4);
+            prob[roll] = ((prob[roll] / 50000) * 100).toFixed(4);
         }
     }
     return prob
