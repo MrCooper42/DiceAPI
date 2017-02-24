@@ -14,7 +14,6 @@ import { DieModel } from './dieModel';
 })
 export class DiceComponent implements OnInit {
   private chartData: Array<any>;
-  private dieForm: FormGroup;
   private types = [{ value: '', display: 'Choose Roll Type' },
   { value: '', display: 'Single die roll' },
   { value: '', display: 'Multiple die roll' },
@@ -23,6 +22,8 @@ export class DiceComponent implements OnInit {
   { value: 'x', display: 'Explosive roll' },
   { value: '', display: 'Literal value' }
   ];
+
+  public dieForm: FormGroup;
 
   manualMode = false;
   dieTypeDisplay;
