@@ -95,8 +95,6 @@ export class DiceComponent implements OnInit {
   showManual() {
     if (this.manualMode) {
       this.changeForm();
-    } else {
-      // this.dieForm.reset();
     }
     this.manualMode = !this.manualMode;
   }
@@ -109,9 +107,10 @@ export class DiceComponent implements OnInit {
       dieSides: new FormControl(this.dieModel.dieSides, Validators.pattern(isIntegerRegex)),
       extraNum: new FormControl(this.dieModel.extraNum, Validators.pattern(isIntegerRegex)),
       litNum: new FormControl(this.dieModel.litNum, Validators.pattern(isIntegerRegex)),
-      manual: new FormControl(this.dieModel.manual, Validators.required),
+      manual: new FormControl(this.dieModel.manual),
       submitRoll: new FormControl(null)
     });
+    console.log(this.dieForm, "form")
   }
 
 // connecting to service

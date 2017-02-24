@@ -59,13 +59,13 @@
             <h3 class="text-center">
                 {{ this.dieForm.value.dieNum + this.dieForm.value.dieD + this.dieForm.value.dieSides + dieType + this.dieForm.value.extraNum + this.dieForm.value.litNum }}
             </h3>
-            <button type="submit" id="rollSubmit" class="btn btn-primary col-xs-12 col-sm-6 offset-sm-3">Roll</button>
+            <button type="submit" id="rollSubmit" class="btn btn-primary col-xs-12 col-sm-6 offset-sm-3" [disabled]="!dieForm.valid">Roll</button>
         </div>
-        <div *ngIf="manualMode">
+        <div [hidden]="!manualMode">
             <button type="button" class="btn btn-outline-primary" (click)="showManual()">Use Form</button>
             <div class="form-group">
                 <label for="manual">Manual input: </label>
-                <input class="form-control" formControlName="manual" type="text" name="manual" placeholder="eg. 3d6 - 2" [value]="dieModel.manual" required>
+                <input class="form-control" formControlName="manual" type="text" name="manual" placeholder="eg. 3d6 - 2" [value]="dieModel.manual" [required]="manualMode">
                 <h3 class="text-center">
                     {{ this.dieForm.value.manual }}
                 </h3>
