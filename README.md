@@ -10,3 +10,5 @@ serves on `localhost:3000`
 ## Running unit tests
 
 Run `npm run test:dice` to execute the unit tests via mocha/chai.
+
+TODO: get dice-charts component working
