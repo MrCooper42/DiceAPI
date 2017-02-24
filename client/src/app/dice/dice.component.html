@@ -34,25 +34,35 @@
                 </div>
             </div>
             <div *ngIf="dieTypeDisplay == 'Literal value'">
-                <label for="dieNum">Enter a number: </label>
+                <label for="litNum">Enter a number: </label>
                 <input class="form-control" formControlName="litNum" type="text" name="litNum" [value]="dieModel.litNum">
                 <br>
             </div>
-            <h3 class="text-sm-center">
-                {{ this.dieForm.value.dieNum + this.dieForm.value.dieD + this.dieForm.value.dieSides + dieType + this.dieForm.value.extraNum }}
+            <h3 class="text-center">
+                {{ this.dieForm.value.dieNum + this.dieForm.value.dieD + this.dieForm.value.dieSides + dieType + this.dieForm.value.extraNum + this.dieForm.value.litNum }}
             </h3>
+            <button type="submit" id="rollSubmit" class="btn btn-primary col-xs-12 col-sm-6 offset-sm-3">Roll</button>
         </div>
         <div *ngIf="manualMode">
             <button type="button" class="btn btn-outline-primary" (click)="showManual()">Use Form</button>
             <div class="form-group">
                 <label for="manual">Manual input: </label>
-                <input class="form-control" formControlName="manual" type="text" name="manual" placeholder="eg. 3d6" [value]="dieModel.manual">
-                <h3 class="text-sm-center">
+                <input class="form-control" formControlName="manual" type="text" name="manual" placeholder="eg. 3d6 - 2" [value]="dieModel.manual" required>
+                <h3 class="text-center">
                     {{ this.dieForm.value.manual }}
                 </h3>
             </div>
+            <button type="submit" id="rollSubmit" class="btn btn-primary col-xs-12 col-sm-6 offset-sm-3">Roll</button>
         </div>
-        <button type="submit" id="rollSubmit" class="btn btn-primary col-xs-12 col-sm-6 offset-sm-3">Roll</button>
     </form>
-    <button class="btn" id="addRoll" (click)="getStats('3d6')" class="col-xs-12">test</button>
+    <div id="answer" class="text-center">
+        <h1>Chance of rolling {{rollTotal}} {{lastInput}}</h1>
+        <br>
+        <h2>{{rollChance | percent:'1.2-4'}}</h2>
+        <h4>{{lowRoll}}</h4>
+        <br>
+        <h4>{{highRoll}}</h4>
+    </div>
 </div>
+<!--<app-dice-charts *ngIf="chartData" [data]="chartData"></app-dice-charts>-->
+<!--Is Not Currently Working...-->

@@ -9,13 +9,13 @@ import { AppComponent } from './app.component';
 
 import { DiceModule } from './dice/dice.module';
 
-import { Routing } from './app.routing';
-import { DiceChartsComponent } from './dice-charts/dice-charts.component';
+import { Routing, appRoutingProviders } from './app.routing';
+// import { DiceChartsComponent } from './dice-charts/dice-charts.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    DiceChartsComponent,
+    AppComponent
+    // DiceChartsComponent,
   ],
   imports: [
     NgbModule.forRoot(),
@@ -25,7 +25,7 @@ import { DiceChartsComponent } from './dice-charts/dice-charts.component';
     DiceModule,
     Routing
   ],
-  providers: [],
+  providers: [appRoutingProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

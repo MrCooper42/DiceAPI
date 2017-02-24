@@ -5,16 +5,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { DiceService } from './dice.service';
 import { DiceComponent } from './dice.component';
+// import { DiceChartsComponent } from '../dice-charts/dice-charts.component';
 
 @NgModule({
   imports: [
     NgbModule,
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   declarations: [
-    DiceComponent
+    DiceComponent,
+    // DiceChartsComponent
   ],
   providers: [
     DiceService

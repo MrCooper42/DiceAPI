@@ -1,3 +1,4 @@
+import { DiceChartsComponent } from './dice-charts.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -5,6 +6,8 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule
   ],
-  declarations: []
+  declarations: [
+    DiceChartsComponent
+  ]
 })
 export class DiceChartsModule { }

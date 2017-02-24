@@ -2,13 +2,12 @@
 
 const diceRegex = /^(\d+)(?:d(\d*)(?:([kdx])(\d+))?)?$/;
 const dieRegex = /^(d)(\d+)$/
-const operatorRegex = /([-+])/g;
+const operatorRegex = / *([-+]) */g;
 
 const randInt = max => Math.ceil(Math.random() * max);
 
 const dieRoll = (expression) => {
     let type = determineType(expression);
-    // console.log(type, "type")
     if (type.type === null) {
         return null;
     }
@@ -33,7 +32,6 @@ const dieRoll = (expression) => {
 }
 
 const determineType = (toRoll) => {
-    // console.log(toRoll, "toroll")
     if (diceRegex.exec(toRoll) === null) {
         return null;
     }
@@ -50,10 +48,10 @@ const determineType = (toRoll) => {
     } else if (type === undefined) {
         roll.type = "single";
         return roll;
-    } else if (type == "d" && num < N) {
+    } else if (type == "d" && num <= N) {
         roll.type = "lowest";
         return roll;
-    } else if (type == "k" && num < N) {
+    } else if (type == "k" && num <= N) {
         roll.type = "highest";
         return roll;
     } else if (type == "x" && num <= sides) {
@@ -78,26 +76,40 @@ const diceRoll = (toRoll, rol) => {
 }
 
 const dropLow = (toRoll, rol) => {
-    let arr = [];
+    let arr = [],
+        total;
     for (let i = 0; i < rol.N; i++) {
         arr.push(randInt(rol.sides));
     }
+    if (rol.num >= rol.N) {
+        total = "0"
+    } else {
+        total = arr.sort().slice((rol.num), arr.length).reduce((a, b) => a + b)
+    }
     let val = {
         'die': arr,
-        'total': arr.sort((a, b) => a - b).slice((rol.num), arr.length).reduce((a, b) => a + b)
+        'total': total
     }
     return val;
 }
 
 const keepHigh = (toRoll, rol) => {
-    let arr = [];
+    let arr = [],
+        total,
+        die;
     for (let i = 0; i < rol.N; i++) {
         arr.push(randInt(rol.sides));
     }
-    let total = arr.sort((a, b) => b - a).splice(0, rol.num)
+    if (rol.num >= rol.N) {
+        total = arr.reduce((a, b) => a + b);
+        die = arr.sort((a, b) => b - a);
+    } else {
+        total = arr.sort((a, b) => b - a).splice(0, rol.num).reduce((a, b) => a + b);
+        die = arr.concat(total).sort((a, b) => b - a);
+    }
     let val = {
-        'die': arr.concat(total).sort((a, b) => b - a),
-        'total': total.reduce((a, b) => a + b)
+        'die': arr,
+        'total': total
     }
     return val;
 }
@@ -115,29 +127,18 @@ const explosiveRoll = (toRoll, rol, answer = 0) => {
         arr.push(currRoll);
     }
     let val = {
-        'total': arr.reduce((a, b) => a + b),
-        'die': arr
+        'die': arr,
+        'total': arr.reduce((a, b) => a + b)
     }
     return val;
 }
 
-// console.log(/^(\d+)(?:d(\d*)(?:([kdx])(\d+))?) *([-+] *|$)/.exec("3d5 +5"), "test regex")
-
 const evaluate = (userInput) => {
     let vals = [];
-
     let uiArr = userInput
-        .split(' ')
-        .join('')
         .split(operatorRegex)
         .map((input) => (dieRegex.exec(input) !== null) ? input = `1${input}` : input)
-        .filter((check) => {
-            let bool = false
-            if (diceRegex.exec(check) !== null) bool = true;
-            if (operatorRegex.test(check)) bool = true;
-            return bool
-        });
-    // .filter((check) => (diceRegex.exec(check) !== null) ? true : (operatorRegex.test(check)) ? true : false);
+        // .filter((check) => (diceRegex.exec(check) !== null) ? true : (operatorRegex.test(check)) ? true : false);
 
     if (uiArr.length % 2 == 0) {
         uiArr.pop();
@@ -159,7 +160,6 @@ const evaluate = (userInput) => {
         }).join('');
 
     let answer = eval(str);
-
     let data = {
         'values': vals,
         'answer': answer
@@ -181,13 +181,13 @@ const check = (input, max, min) => {
         }
 
     }
-    console.log(loose.length, "loose");
+    console.log(loose, "loose");
     console.log(working.length, "working");
 }
 
 const probability = (input) => {
     let prob = {};
-    for (let i = 0; i < 250000; i++) {
+    for (let i = 0; i < 25000; i++) {
         let answer = evaluate(input).answer
 
         if (prob.hasOwnProperty(answer)) {
@@ -199,7 +199,7 @@ const probability = (input) => {
     }
     for (var roll in prob) {
         if (prob.hasOwnProperty(roll)) {
-            prob[roll] = ((prob[roll] / 250000) * 100).toFixed(4);
+            prob[roll] = ((prob[roll] / 25000) * 100).toFixed(4);
         }
     }
     return prob
@@ -212,9 +212,11 @@ const probability = (input) => {
 // let literal = "200";
 // let fail = "xxxxxxxxx";
 // let input = `${explosive} + ${literal}`;
+// let input2 = `${input} - ${single} + ${literal}`
 // console.log(eval(`${literal}+${literal}`), "lit")
 // console.log(evaluate('3d6+211'), "input");
-// console.log(evaluate(input), "input 2");
+// console.log(evaluate(input), "input");
+// console.log(evaluate(input2), "input 2");
 // console.log(evaluate('d6'), "single");
 // console.log(evaluate(literal), "literal");
 // console.log(evaluate(single), "multi");
@@ -222,7 +224,7 @@ const probability = (input) => {
 // console.log(evaluate(highest), "highest");
 // console.log(evaluate(explosive), "explosive");
 // console.log(evaluate(fail), "fail");
-// check('3d6+212', 230, 209)
+// check('5d6d3', 12, 2)
 // probability('3d6')
 
 

@@ -1,6 +1,6 @@
-import { Component, ElementRef,OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import * as D3 from 'd3/index';
 
@@ -13,21 +13,9 @@ import { DieModel } from './dieModel';
   styleUrls: ['./dice.component.css']
 })
 export class DiceComponent implements OnInit {
-  manualMode = false;
-  dieTypeDisplay;
-  currentInput = '';
-  allInputs = [];
-  dieType = '';
-  rollTotal;
-  currExtra = '';
-  host;
-  svgContainer;
-
-  errorMessage: string;
-  dieModel = new DieModel('3', 'd', '6', '', '', '', '');
-
-  public dieForm: FormGroup;
-  public types = [{ value: '', display: 'Choose Roll Type' },
+  private chartData: Array<any>;
+  private dieForm: FormGroup;
+  private types = [{ value: '', display: 'Choose Roll Type' },
   { value: '', display: 'Single die roll' },
   { value: '', display: 'Multiple die roll' },
   { value: 'd', display: 'Drop lows roll' },
@@ -36,13 +24,21 @@ export class DiceComponent implements OnInit {
   { value: '', display: 'Literal value' }
   ];
 
-  constructor(
-    private diceService: DiceService,
-    private _fb: FormBuilder,
-    private _element: ElementRef
-  ) {
-    this.host = D3.select(this._element.nativeElement);
-   }
+  manualMode = false;
+  dieTypeDisplay;
+  lastInput = '';
+  allInputs = [];
+  dieType = '';
+  currExtra = '';
+  rollStats;
+  rollTotal;
+  rollChance;
+  lowRoll;
+  highRoll;
+  // errorMessage: string; TODO:
+  dieModel = new DieModel('3', 'd', '6', '', '', '', '');
+
+  constructor(private diceService: DiceService) { }
 
   setRoll() {
     const formData = this.dieForm.value;
@@ -50,10 +46,10 @@ export class DiceComponent implements OnInit {
     let final;
     if (formData.manual.length > 0) {
       input = formData.manual;
-      this.dieForm.reset();
+      // this.dieForm.reset();
       formData.submitRoll = input;
     } else {
-      input = formData.dieNum + formData.dieD + formData.dieSides + this.dieType + formData.extraNum;
+      input = formData.dieNum + formData.dieD + formData.dieSides + this.dieType + formData.extraNum + formData.litNum;
     }
     this.allInputs.push(input);
     if (this.allInputs.length > 1) {
@@ -68,7 +64,7 @@ export class DiceComponent implements OnInit {
   chooseType(value) {
     switch (value.display) {
       case 'Literal value':
-        this.dieModel = new DieModel('', '', '', '', '2', '', '');
+        this.dieModel = new DieModel('', '', '', '', '', '2', '');
         break;
       case 'Single die roll':
         this.dieModel = new DieModel('', 'd', '6', '', '', '', '');
@@ -98,7 +94,7 @@ export class DiceComponent implements OnInit {
     if (this.manualMode) {
       this.changeForm();
     } else {
-      this.dieForm.reset();
+      // this.dieForm.reset();
     }
     this.manualMode = !this.manualMode;
   }
@@ -110,7 +106,7 @@ export class DiceComponent implements OnInit {
       dieSides: new FormControl(this.dieModel.dieSides),
       extraNum: new FormControl(this.dieModel.extraNum),
       litNum: new FormControl(this.dieModel.litNum),
-      manual: new FormControl(this.dieModel.manual),
+      manual: new FormControl(this.dieModel.manual, Validators.required),
       submitRoll: new FormControl(null)
     });
   }
@@ -120,37 +116,44 @@ export class DiceComponent implements OnInit {
     this.diceService.getTotal(formData)
       .subscribe(
       data => {
-        console.log(data, 'roll returned');
-        this.rollTotal = data;
+        console.log(data.answer, 'roll returned');
+        this.rollTotal = data.answer;
+        this.lastInput = ' in ' + formData.submitRoll;
+        this.getStats(formData);
       },
-      error => console.error(error));
-      this.getStats(formData);
-      this.allInputs = [];
-      this.changeForm();
-
+      error => {
+        console.error(error);
+        this.lastInput = '';
+        this.rollChance = '0';
+        this.rollTotal = `is none... Please check your input`;
+      });
+    this.allInputs = [];
   }
 
   getStats(formData) {
     this.diceService.getProbability(formData)
       .subscribe(
       data => {
-        console.log(data, 'stats returned');
-        this.rollTotal = data;
+        const keys = Object.keys(data);
+        this.lowRoll = `Lowest value: ${keys[0]}`;
+        this.highRoll = `Highest value: ${keys[keys.length - 1]}`;
+        for (const roll in data) {
+          if (`${this.rollTotal}` === `${roll}`) {
+            this.rollChance = (data[roll] / 100);
+          }
+        }
+        this.rollStats = data;
       },
       error => console.error(error));
       this.allInputs = [];
-      this.changeForm();
-  }
-
-// D3 Work
-  buildSVG(): void {
-    this.svgContainer = this.host.append('div')
+      // this.changeForm();
   }
 
   ngOnInit() {
+    this.rollTotal = '';
     this.dieTypeDisplay = this.types[0].display;
     this.changeForm();
-    this.buildSVG();
+    this.chartData = [1, 2, 3, 4, 5, 6, 7];
   }
 
 }

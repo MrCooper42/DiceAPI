@@ -53,11 +53,37 @@ describe("die roller", function() {
             }
             expect(evaluated).to.equal(true);
         })
+        it("5d6d5 returns 0", function() {
+            var evaluated;
+            for (var i = 0; i < 100000; i++) {
+                var lowEval = dice.evaluate("5d6d5").answer;
+                if (lowEval == 0) {
+                    evaluated = true;
+                } else {
+                    evaluated = false;
+                    expect(lowEval).to.equal("to equal 0");
+                }
+            }
+            expect(evaluated).to.equal(true);
+        })
         it("5d6k2 returns a value between 2 and 12", function() {
             var evaluated;
-            for (var i = 0; i < 10000; i++) {
+            for (var i = 0; i < 100000; i++) {
                 var highEval = dice.evaluate("5d6k2").answer;
                 if (highEval <= 12 && highEval >= 2) {
+                    evaluated = true;
+                } else {
+                    evaluated = false;
+                    expect(highEval).to.equal("a number lower than 13 and greater than 1");
+                }
+            }
+            expect(evaluated).to.equal(true);
+        })
+        it("5d6k5 returns a value between 5 and 30", function() {
+            var evaluated;
+            for (var i = 0; i < 100000; i++) {
+                var highEval = dice.evaluate("5d6k5").answer;
+                if (highEval <= 30 && highEval >= 5) {
                     evaluated = true;
                 } else {
                     evaluated = false;

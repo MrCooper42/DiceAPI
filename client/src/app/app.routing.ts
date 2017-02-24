@@ -1,3 +1,4 @@
+import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DiceComponent } from './dice/dice.component';
@@ -14,4 +15,6 @@ const ROUTES: Routes = [
     }
 ];
 
-export const Routing = RouterModule.forRoot(ROUTES);
+export const appRoutingProviders: any[] = [];
+
+export const Routing: ModuleWithProviders = RouterModule.forRoot(ROUTES);
