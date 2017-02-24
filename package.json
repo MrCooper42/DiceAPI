@@ -15,7 +15,7 @@
         "lint": "ng lint",
         "e2e": "ng e2e",
         "start": "node ./server/bin/www",
-        "test:dice": "mocha ./server/test/ && ng test",
+        "test:dice": "mocha ./server/test/",
         "build": "start ng build --watch && nodemon ",
         "build:prod": "ng build --prod && npm start",
         "heroku-postbuild": "ng build --prod"
