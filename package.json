@@ -18,7 +18,7 @@
         "test:dice": "mocha ./server/test/ && ng test",
         "build": "start ng build --watch && nodemon ",
         "build:prod": "ng build --prod && npm start",
-        "heroku-prebuild": "ng build --prod"
+        "heroku-postbuild": "ng build --prod"
     },
     "dependencies": {
         "@angular/common": "^2.4.0",
