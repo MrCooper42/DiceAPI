@@ -114,7 +114,7 @@ const keepHigh = (toRoll, rol) => {
     return val;
 }
 
-const explosiveRoll = (toRoll, rol, answer = 0) => {
+const explosiveRoll = (toRoll, rol) => {
     let arr = [];
     if (rol.num == 1) {
         return Infinity;
